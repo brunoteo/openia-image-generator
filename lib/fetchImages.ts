@@ -1,5 +1,6 @@
 const fetchImages = () =>
-  fetch("/api/getImages", {
+  fetch("/api/mongodb", {
+    method: "GET",
     cache: "no-store",
   }).then((res) => res.json());
 

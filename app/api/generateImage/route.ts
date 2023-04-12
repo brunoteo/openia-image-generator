@@ -1,21 +1,18 @@
 import { NextResponse } from "next/server";
+import openai from "../../../lib/openia";
 
 export async function POST(request: Request) {
-  const res = await request.json(); // res now contains body
+  const res = await request.json();
   const prompt = res.prompt;
 
-  const response = await fetch(
-    "https://sonnytestapp.azurewebsites.net/api/generateImage",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    }
-  );
+  const response = await openai.createImage({
+    prompt: prompt,
+    n: 1,
+    size: "1024x1024"
+  })
+  const image_url = response.data.data[0].url;
 
-  const textData = await response.text();
+  console.log(image_url)
 
-  return NextResponse.json(textData);
+  return NextResponse.json(image_url);
 }

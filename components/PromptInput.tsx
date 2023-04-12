@@ -24,7 +24,6 @@ function PromptInput() {
 
   const submitPrompt = async (useSuggestion?: boolean) => {
     const inputPrompt = input;
-    console.log(inputPrompt);
     setInput("");
 
     const notificationPrompt = inputPrompt || suggestion;
@@ -50,8 +49,24 @@ function PromptInput() {
 
     const data = await res.json();
 
-    if (data.error) {
-      toast.error(data.error);
+    const image = {
+      insertDate: Date.now(),
+      url: data,
+      text: useSuggestion ? suggestion : inputPrompt
+    }
+
+    const insertImage = await fetch("api/mongodb", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(image),
+    })
+
+    const insertResponse = await insertImage.json()
+
+    if (data.error || insertResponse.error) {
+      toast.error(data.error || insertResponse.error);
     } else {
       toast.success(`Your AI Art has been Generated!`, {
         id: notification,
