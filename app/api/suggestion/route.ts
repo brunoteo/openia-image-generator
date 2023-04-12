@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import openia from "../../../lib/openia";
 
+export const fetchCache = 'force-no-store'
+
 export async function GET(request: Request) {
   const response = await openia.createCompletion({
       model: "text-davinci-003",
@@ -13,8 +15,7 @@ export async function GET(request: Request) {
 
   const responseText = response.data.choices[0].text;
 
+  console.log(responseText);
+
   return NextResponse.json(responseText?.trim());
-  // return new Response(JSON.stringify(responseText?.trim()), {
-  //   status: 200,
-  // });
 }
